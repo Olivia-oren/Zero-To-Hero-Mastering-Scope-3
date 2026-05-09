@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Scope 3 SME Roadmap — From Curious to Authority</title>
+<meta name="description" content="A 10-level practical roadmap to become a Subject Matter Expert in Scope 3 GHG emissions across all 15 categories." />
+<style>
+  :root{
+    --bg:#0f1729;
+    --surface:#172033;
+    --surface-2:#1d2942;
+    --border:#2a3654;
+    --text:#e7ecf5;
+    --muted:#9aa6c0;
+    --cyan:#00d4aa;
+    --amber:#f5a623;
+    --violet:#8b8cff;
+    --rose:#ff6b8a;
+    --shadow:0 10px 30px -10px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter','Segoe UI',system-ui,sans-serif;line-height:1.55}
+  a{color:var(--cyan)}
+  .wrap{max-width:1100px;margin:0 auto;padding:48px 24px 96px}
+  header.hero{
+    background:radial-gradient(1200px 400px at 20% 0%,rgba(0,212,170,.18),transparent 60%),
+               radial-gradient(800px 300px at 80% 0%,rgba(245,166,35,.15),transparent 60%),
+               linear-gradient(180deg,#0f1729 0%,#131c30 100%);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:48px 40px;
+    box-shadow:var(--shadow);
+    margin-bottom:40px;
+  }
+  .eyebrow{
+    display:inline-block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--cyan);background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);
+    padding:6px 12px;border-radius:999px;margin-bottom:16px;font-weight:700
+  }
+  h1{font-size:42px;line-height:1.1;margin:0 0 12px;letter-spacing:-.02em}
+  h1 span{background:linear-gradient(90deg,var(--cyan),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{color:var(--muted);font-size:17px;max-width:780px}
+  .pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .pill{background:var(--surface-2);border:1px solid var(--border);padding:8px 14px;border-radius:999px;font-size:13px;color:var(--muted)}
+  .pill b{color:var(--text)}
+
+  section{margin-top:40px}
+  h2{font-size:24px;margin:0 0 16px;letter-spacing:-.01em}
+  h3{margin:0 0 8px}
+  p{color:var(--muted)}
+
+  /* Level cards */
+  .levels{display:grid;gap:18px}
+  .lvl{
+    position:relative;background:var(--surface);border:1px solid var(--border);border-radius:18px;
+    padding:24px 24px 22px;box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .lvl::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cyan);
+  }
+  .lvl.l2::before{background:#5ad6ff}
+  .lvl.l3::before{background:#7eb6ff}
+  .lvl.l4::before{background:var(--violet)}
+  .lvl.l5::before{background:#c084fc}
+  .lvl.l6::before{background:var(--amber)}
+  .lvl.l7::before{background:#fb923c}
+  .lvl.l8::before{background:var(--rose)}
+  .lvl.l9::before{background:#f472b6}
+  .lvl.l10::before{background:linear-gradient(180deg,var(--cyan),var(--amber))}
+  .lvl-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:10px}
+  .lvl-title{display:flex;align-items:center;gap:14px}
+  .badge{
+    width:54px;height:54px;border-radius:14px;display:grid;place-items:center;
+    background:rgba(0,212,170,.12);border:1px solid rgba(0,212,170,.35);
+    font-weight:800;font-size:18px;color:var(--cyan)
+  }
+  .lvl.l4 .badge,.lvl.l5 .badge{background:rgba(139,140,255,.12);border-color:rgba(139,140,255,.35);color:var(--violet)}
+  .lvl.l6 .badge,.lvl.l7 .badge{background:rgba(245,166,35,.12);border-color:rgba(245,166,35,.35);color:var(--amber)}
+  .lvl.l8 .badge,.lvl.l9 .badge{background:rgba(255,107,138,.12);border-color:rgba(255,107,138,.35);color:var(--rose)}
+  .lvl.l10 .badge{background:linear-gradient(135deg,rgba(0,212,170,.18),rgba(245,166,35,.18));border-color:rgba(245,166,35,.4);color:var(--amber)}
+  .lvl h3{font-size:20px}
+  .meta{font-size:12px;color:var(--muted);margin-top:2px}
+  .score{
+    display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);
+    background:var(--surface-2);border:1px solid var(--border);padding:8px 12px;border-radius:10px;white-space:nowrap
+  }
+  .score b{color:var(--text);font-size:15px}
+  .bar{width:120px;height:6px;background:#0c1322;border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--amber))}
+  .grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-top:14px}
+  @media(max-width:740px){.grid2{grid-template-columns:1fr}}
+  .block{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .block h4{margin:0 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan)}
+  .block.k h4{color:var(--amber)}
+  ul{margin:6px 0 0 18px;padding:0}
+  li{margin:4px 0;color:#cfd6ea}
+
+  /* 15 categories */
+  .cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .cat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+  .cat .num{font-size:11px;color:var(--cyan);font-weight:700;letter-spacing:.1em}
+  .cat .name{font-weight:600;margin:2px 0 4px}
+  .cat .who{font-size:12px;color:var(--muted)}
+  .ups{border-left:3px solid var(--cyan)}
+  .downs{border-left:3px solid var(--amber)}
+
+  /* Toolkit */
+  .tool{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .tool .t{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+  .tool .t b{color:var(--text)}
+  .tool .t small{color:var(--muted);display:block;margin-top:4px}
+
+  footer{margin-top:60px;text-align:center;color:var(--muted);font-size:13px}
+  .tag{display:inline-block;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);font-size:11px;padding:2px 8px;border-radius:999px;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Personal Roadmap · GHG Protocol · Scope 3</span>
+    <h1>From Curious to <span>Scope 3 Authority</span></h1>
+    <p class="lead">A 10-level practical roadmap to become the go-to Subject Matter Expert on Scope 3 emissions — covering boundaries, all 15 categories, data quality, target setting, assurance, and influence.</p>
+    <div class="pill-row">
+      <span class="pill">⏱ <b>3–4 weeks</b> accelerated track (ESG pros)</span>
+      <span class="pill">📚 <b>GHG Protocol</b> + SBTi + ISSB</span>
+      <span class="pill">🛠 Hands-on <b>15 categories</b></span>
+      <span class="pill">🎯 Outcome: <b>Lead Scope 3 programs</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2>The 10-Level Roadmap</h2>
+    <p>Each level lists what to learn, what to build, and where your expertise score lands after completing it.</p>
+
+    <div class="levels">
+
+      <!-- LEVEL 1 -->
+      <article class="lvl l1">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L1</div>
+            <div>
+              <h3>GHG Foundations & Vocabulary</h3>
+              <div class="meta">Climate science basics · GHG Protocol overview · Why Scope 3 matters</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:15%"></i></div><b>1.5/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>The 7 Kyoto gases, GWP, CO₂e</li>
+              <li>What is GHG Protocol, ISO 14064-1, IPCC AR6</li>
+              <li>Difference between Scope 1, 2, 3 in plain English</li>
+              <li>Why Scope 3 is usually 70–90% of a company's footprint</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>One-page glossary in your own words</li>
+              <li>Footprint cheat sheet for 3 industries</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 2 -->
+      <article class="lvl l2">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L2</div>
+            <div>
+              <h3>Boundaries — Organizational & Operational</h3>
+              <div class="meta">Equity share · Financial control · Operational control · JVs, subsidiaries, leased assets</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:25%"></i></div><b>2.5/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>The 3 consolidation approaches and when each is used</li>
+              <li>Treatment of JVs, associates, franchises, leased assets</li>
+              <li>Loans vs equity — when emissions DO and do NOT count</li>
+              <li>How boundary choice shifts emissions between Scope 1/2/3</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>Boundary decision flowchart (your own)</li>
+              <li>Apply all 3 approaches to a fictional group of 5 entities</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 3 -->
+      <article class="lvl l3">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L3</div>
+            <div>
+              <h3>Scope 1 & 2 Mastery (the prerequisite)</h3>
+              <div class="meta">Stationary/mobile combustion · Fugitives · Process · Location vs Market-based electricity</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:35%"></i></div><b>3.5/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>Activity data × emission factor = emissions (and its pitfalls)</li>
+              <li>Scope 2 Guidance: location vs market-based, RECs, PPAs, GOs</li>
+              <li>Refrigerant leakage, SF₆, process emissions</li>
+              <li>Common mistakes: double counting electricity, missing T&D losses</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>Mini Scope 1+2 inventory in Excel for a fake mid-size company</li>
+              <li>Reconcile location vs market-based numbers</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 4 -->
+      <article class="lvl l4">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L4</div>
+            <div>
+              <h3>Scope 3 Standard — The 15 Categories Map</h3>
+              <div class="meta">Upstream vs downstream · Relevance test · Minimum boundary rules</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:50%"></i></div><b>5/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>GHG Protocol Corporate Value Chain (Scope 3) Standard cover-to-cover</li>
+              <li>Materiality / relevance test (size, influence, risk, stakeholder, sector)</li>
+              <li>Minimum boundary requirements per category</li>
+              <li>How to justify exclusions defensibly</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>One-page summary card for each of the 15 categories</li>
+              <li>Relevance scoring template (apply to 2 industries)</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 5 -->
+      <article class="lvl l5">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L5</div>
+            <div>
+              <h3>Calculation Methods — Spend, Average, Hybrid, Supplier-Specific</h3>
+              <div class="meta">Methods hierarchy · EEIO · Process LCA · Activity-based</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:60%"></i></div><b>6/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>Spend-based (EEIO: EXIOBASE, USEEIO) — when it's good enough</li>
+              <li>Average-data method (mass × industry factor)</li>
+              <li>Supplier-specific (PCFs, ISO 14067) — gold standard</li>
+              <li>Hybrid approaches and progression strategy</li>
+              <li>Pedigree matrix & data quality scoring</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>Calculate Cat 1 (Purchased Goods) for a sample BOM using all 4 methods</li>
+              <li>Compare results & write a method-selection memo</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 6 -->
+      <article class="lvl l6">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L6</div>
+            <div>
+              <h3>Deep Dive — Upstream Categories (1–8)</h3>
+              <div class="meta">Purchased goods · Capital goods · Fuel & energy · Transport · Waste · Travel · Commuting · Leased</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:70%"></i></div><b>7/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>Cat 1 vs Cat 2 (consumables vs capex) — common confusion</li>
+              <li>Cat 3 WTT, T&D losses — avoid double counting with Scope 2</li>
+              <li>Cat 4 vs Cat 9 — who pays for transport decides scope</li>
+              <li>Cat 6 travel: distance method, DEFRA factors, RFI for flights</li>
+              <li>Cat 7 commuting: survey design, hybrid work emissions</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>End-to-end Cat 1–8 model for a mid-size manufacturer</li>
+              <li>Document data sources, factors, assumptions per category</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 7 -->
+      <article class="lvl l7">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L7</div>
+            <div>
+              <h3>Deep Dive — Downstream Categories (9–15)</h3>
+              <div class="meta">Sold products use phase · EOL · Franchises · Investments (Cat 15 / PCAF)</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:78%"></i></div><b>7.8/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>Cat 11 use-phase: direct vs indirect use, lifetime assumptions</li>
+              <li>Cat 12 EOL: waste fate modeling</li>
+              <li>Cat 15 Investments: PCAF methodology for FIs (the heaviest category)</li>
+              <li>Sold products with emissions in their life (autos, oil & gas, appliances)</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>Cat 11 model for an electric appliance (lifetime kWh × grid factor)</li>
+              <li>Cat 15 mini financed-emissions calc using PCAF data quality score</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 8 -->
+      <article class="lvl l8">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L8</div>
+            <div>
+              <h3>Targets, Disclosure & Assurance</h3>
+              <div class="meta">SBTi · CDP · ISSB / IFRS S2 · CSRD / ESRS · TCFD · Limited vs reasonable assurance</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:85%"></i></div><b>8.5/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>SBTi Corporate Net-Zero Standard & FLAG; Scope 3 thresholds (40% rule, 67% coverage)</li>
+              <li>CDP Climate questionnaire — what scoring rewards</li>
+              <li>ISSB S2 & ESRS E1 disclosure requirements (2024+)</li>
+              <li>ISAE 3410 / ISAE 3000 — what assurers test</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>Mock SBTi target submission for a fictional company</li>
+              <li>CDP-aligned Scope 3 disclosure narrative</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 9 -->
+      <article class="lvl l9">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L9</div>
+            <div>
+              <h3>Reduction Strategy & Supplier Engagement</h3>
+              <div class="meta">Marginal abatement cost curves · Supplier programs · Insetting · Internal carbon price</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:92%"></i></div><b>9.2/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Learn</h4>
+            <ul>
+              <li>Designing supplier engagement programs (CDP Supply Chain, EcoVadis, Manufacture 2030)</li>
+              <li>Product redesign, low-carbon procurement, modal shifts</li>
+              <li>Insetting vs offsetting; quality criteria for credits (ICVCM, VCMI)</li>
+              <li>Building a MACC for Scope 3 levers</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Build</h4>
+            <ul>
+              <li>3-year Scope 3 reduction plan with KPIs and owners</li>
+              <li>Supplier scorecard template</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- LEVEL 10 -->
+      <article class="lvl l10">
+        <div class="lvl-head">
+          <div class="lvl-title">
+            <div class="badge">L10</div>
+            <div>
+              <h3>Authority — Lead, Audit, Publish, Influence</h3>
+              <div class="meta">Lead programs · Train others · Speak at forums · Influence sector methodology</div>
+            </div>
+          </div>
+          <div class="score"><span>Score</span><div class="bar"><i style="width:100%"></i></div><b>10/10</b></div>
+        </div>
+        <div class="grid2">
+          <div class="block">
+            <h4>Do</h4>
+            <ul>
+              <li>Lead an end-to-end Scope 3 inventory through external assurance</li>
+              <li>Publish a methodology note / LinkedIn series / conference talk</li>
+              <li>Mentor 2+ analysts; build internal training</li>
+              <li>Contribute to a sector working group (WBCSD, PCAF, SBTi sector pathway)</li>
+            </ul>
+          </div>
+          <div class="block k">
+            <h4>Signal</h4>
+            <ul>
+              <li>Recognised externally — invited to review or speak</li>
+              <li>Quoted in CDP/ISSB/CSRD discussions internally</li>
+              <li>Companies seek you out for Scope 3 advisory</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- 15 categories quick map -->
+  <section>
+    <h2>The 15 Scope 3 Categories — Quick Map</h2>
+    <p>Print this. Refer daily until it lives in your head.</p>
+
+    <h3 style="color:var(--cyan);margin-top:18px">Upstream (1–8)</h3>
+    <div class="cats">
+      <div class="cat ups"><div class="num">CAT 01</div><div class="name">Purchased Goods & Services</div><div class="who">Usually #1 or #2 hotspot</div></div>
+      <div class="cat ups"><div class="num">CAT 02</div><div class="name">Capital Goods</div><div class="who">Buildings, machinery, IT hardware</div></div>
+      <div class="cat ups"><div class="num">CAT 03</div><div class="name">Fuel- & Energy-Related</div><div class="who">WTT + T&D losses (not in S1/S2)</div></div>
+      <div class="cat ups"><div class="num">CAT 04</div><div class="name">Upstream Transportation</div><div class="who">When YOU pay for the freight in</div></div>
+      <div class="cat ups"><div class="num">CAT 05</div><div class="name">Waste Generated in Operations</div><div class="who">Landfill, incineration, recycling</div></div>
+      <div class="cat ups"><div class="num">CAT 06</div><div class="name">Business Travel</div><div class="who">Flights, hotels, rental cars</div></div>
+      <div class="cat ups"><div class="num">CAT 07</div><div class="name">Employee Commuting</div><div class="who">Includes WFH energy use</div></div>
+      <div class="cat ups"><div class="num">CAT 08</div><div class="name">Upstream Leased Assets</div><div class="who">Only if not in your S1/S2</div></div>
+    </div>
+
+    <h3 style="color:var(--amber);margin-top:22px">Downstream (9–15)</h3>
+    <div class="cats">
+      <div class="cat downs"><div class="num">CAT 09</div><div class="name">Downstream Transportation</div><div class="who">Customer pays for outbound freight</div></div>
+      <div class="cat downs"><div class="num">CAT 10</div><div class="name">Processing of Sold Products</div><div class="who">Intermediate goods further processed</div></div>
+      <div class="cat downs"><div class="num">CAT 11</div><div class="name">Use of Sold Products</div><div class="who">Often #1 for autos, oil & gas, appliances</div></div>
+      <div class="cat downs"><div class="num">CAT 12</div><div class="name">End-of-Life of Sold Products</div><div class="who">Disposal fate modeling</div></div>
+      <div class="cat downs"><div class="num">CAT 13</div><div class="name">Downstream Leased Assets</div><div class="who">You're the lessor</div></div>
+      <div class="cat downs"><div class="num">CAT 14</div><div class="name">Franchises</div><div class="who">If not in S1/S2 already</div></div>
+      <div class="cat downs"><div class="num">CAT 15</div><div class="name">Investments</div><div class="who">PCAF — dominant for banks/insurers</div></div>
+    </div>
+  </section>
+
+  <!-- Toolkit -->
+  <section>
+    <h2>Daily Toolkit</h2>
+    <div class="tool">
+      <div class="t"><b>GHG Protocol</b><small>Corporate Standard, Scope 2 Guidance, Scope 3 Standard, Scope 3 Calculation Guidance</small></div>
+      <div class="t"><b>SBTi</b><small>Corporate Net-Zero Standard, FLAG, Sector pathways, Target validation criteria</small></div>
+      <div class="t"><b>PCAF</b><small>Global GHG Accounting Standard for the Financial Industry (Cat 15)</small></div>
+      <div class="t"><b>CDP</b><small>Climate Change questionnaire + scoring methodology</small></div>
+      <div class="t"><b>ISSB / IFRS S2 & ESRS E1</b><small>Mandatory disclosure rules — read at least once a year</small></div>
+      <div class="t"><b>Emission factor DBs</b><small>DEFRA, EPA, IEA, ecoinvent, EXIOBASE, USEEIO, AIB</small></div>
+      <div class="t"><b>Tools to play with</b><small>Excel, Python (pandas), Watershed/Sweep/Persefoni demos, openLCA</small></div>
+      <div class="t"><b>Reading rhythm</b><small>1 sustainability report / week · CDP A-list company / month</small></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How to Track Progress</h2>
+    <p>Self-assess every 3–4 weeks. Move a level only when you can <b>teach it</b> to someone else AND <b>build the artifact</b> listed in that level.</p>
+    <p><span class="tag">Tip</span> Keep a running "questions I can't answer yet" log — that's your next study list.</p>
+  </section>
+
+  <footer>
+    Built as a personal study companion · GHG Protocol · SBTi · PCAF · ISSB
+  </footer>
+</div>
+</body>
+</html>
