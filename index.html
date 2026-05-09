@@ -300,40 +300,98 @@ em { color: var(--teal); font-style: italic; }
 .level__rating-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--bg-tertiary); }
 .level__rating-dot--filled { background: var(--accent); }
 
-/* ============== CHAT (STORY) ============== */
-.chat-wrap { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 6px 0 8px; overflow-y: auto; }
-.chat-msg { display: flex; gap: 12px; max-width: 78%; animation: chatIn .4s ease; }
-@keyframes chatIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* ============== CHAT-FLOW (animated reveal) ============== */
+.chat-flow {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  gap: 14px; padding: 8px 6px 12px;
+  overflow-y: auto; position: relative;
+  scroll-behavior: smooth;
+}
+.chat-msg {
+  display: flex; gap: 12px; max-width: 80%;
+  align-items: flex-start;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.chat-msg.visible { opacity: 1; transform: translateY(0); }
+.chat-msg[data-side="right"] { align-self: flex-end; flex-direction: row-reverse; }
+.chat-msg[data-side="left"]  { align-self: flex-start; }
+.chat-msg__col {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; flex-shrink: 0; width: 56px;
+}
 .chat-msg__avatar {
-  width: 38px; height: 38px; border-radius: 50%;
-  display: grid; place-items: center; font-size: 18px;
-  flex-shrink: 0;
+  width: 48px; height: 48px; border-radius: 12px;
+  display: grid; place-items: center; font-size: 22px;
+  background: #fff; border: 2px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
-.chat-msg__bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.55; }
-.chat-msg__name {
-  font-size: 11px; font-weight: 700; margin-bottom: 3px;
-  letter-spacing: 0.04em;
+.slide--dark .chat-msg__avatar { background: rgba(255,255,255,0.06); }
+.chat-msg__speaker {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted); text-align: center; line-height: 1.1;
 }
-.chat-msg--maya { align-self: flex-start; }
-.chat-msg--maya .chat-msg__avatar { background: #ecfdf5; color: #047857; }
-.chat-msg--maya .chat-msg__bubble { background: #ecfdf5; border-bottom-left-radius: 4px; color: #064e3b; }
-.chat-msg--maya .chat-msg__name { color: #047857; }
-.chat-msg--rao { align-self: flex-end; flex-direction: row-reverse; }
-.chat-msg--rao .chat-msg__avatar { background: var(--accent-light); color: var(--accent); }
-.chat-msg--rao .chat-msg__bubble { background: var(--accent-light); border-bottom-right-radius: 4px; color: #1e3a8a; }
-.chat-msg--rao .chat-msg__name { color: var(--accent); text-align: right; }
-.chat-msg--priya { align-self: flex-start; }
-.chat-msg--priya .chat-msg__avatar { background: #fef3c7; color: #b45309; }
-.chat-msg--priya .chat-msg__bubble { background: #fffbeb; border-bottom-left-radius: 4px; color: #78350f; }
-.chat-msg--priya .chat-msg__name { color: #b45309; }
-.chat-msg--arjun { align-self: flex-end; flex-direction: row-reverse; }
-.chat-msg--arjun .chat-msg__avatar { background: #fae8ff; color: #86198f; }
-.chat-msg--arjun .chat-msg__bubble { background: #fdf4ff; border-bottom-right-radius: 4px; color: #581c87; }
-.chat-msg--arjun .chat-msg__name { color: #86198f; text-align: right; }
-.chat-msg--lina { align-self: flex-start; }
-.chat-msg--lina .chat-msg__avatar { background: #f5f3ff; color: var(--violet); }
-.chat-msg--lina .chat-msg__bubble { background: #f5f3ff; border-bottom-left-radius: 4px; color: #4c1d95; }
-.chat-msg--lina .chat-msg__name { color: var(--violet); }
+.slide--dark .chat-msg__speaker { color: rgba(255,255,255,0.55); }
+.chat-msg__bubble {
+  padding: 12px 16px; border-radius: 16px;
+  font-size: 14px; line-height: 1.55;
+  color: var(--text-primary);
+  flex: 1; min-height: 40px;
+  word-wrap: break-word; overflow-wrap: anywhere;
+}
+.slide--dark .chat-msg__bubble { color: rgba(255,255,255,0.92); }
+.chat-msg[data-side="left"]  .chat-msg__bubble { border-bottom-left-radius: 6px; }
+.chat-msg[data-side="right"] .chat-msg__bubble { border-bottom-right-radius: 6px; }
+.chat-msg__cursor {
+  display: inline-block; width: 2px; height: 1em;
+  background: currentColor; margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blinkCursor 0.9s step-end infinite;
+}
+@keyframes blinkCursor { 50% { opacity: 0; } }
+
+.typing-indicator {
+  display: flex; gap: 12px; max-width: 80%;
+  align-items: flex-start;
+  animation: chatIn .25s ease;
+}
+@keyframes chatIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.typing-indicator[data-side="right"] { align-self: flex-end; flex-direction: row-reverse; }
+.typing-indicator[data-side="left"]  { align-self: flex-start; }
+.typing-indicator__bubble {
+  padding: 14px 18px; border-radius: 16px;
+  display: flex; gap: 5px; align-items: center;
+}
+.typing-indicator__dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  opacity: 0.4;
+  animation: typingPulse 1s infinite ease-in-out;
+}
+.typing-indicator__dot:nth-child(2) { animation-delay: 0.18s; }
+.typing-indicator__dot:nth-child(3) { animation-delay: 0.36s; }
+@keyframes typingPulse {
+  0%, 60%, 100% { opacity: 0.3; transform: scale(1); }
+  30%           { opacity: 1; transform: scale(1.25); }
+}
+
+.replay-btn {
+  position: absolute; top: 10px; right: 10px; z-index: 5;
+  padding: 7px 14px; font-size: 12px; font-weight: 600;
+  font-family: var(--font-body);
+  background: rgba(255,255,255,0.92); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: 999px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  transition: all 0.2s ease; box-shadow: var(--shadow-sm);
+}
+.replay-btn:hover {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.slide--dark .replay-btn {
+  background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.2);
+}
+.slide--dark .replay-btn:hover { background: var(--accent); }
 
 /* ============== LEARN ============== */
 .scorecard {
@@ -639,6 +697,33 @@ em { color: var(--teal); font-style: italic; }
 }
 .case-detail__lesson b { display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
 
+.case-sources {
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--border-light);
+}
+.case-sources__label {
+  font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 8px;
+}
+.case-sources__pills {
+  display: flex; flex-wrap: wrap; gap: 7px;
+}
+.case-sources__pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--bg-card);
+  color: var(--text-primary); text-decoration: none;
+  font-size: 12px; font-weight: 500; line-height: 1.2;
+  transition: all 0.18s ease;
+}
+.case-sources__pill:hover {
+  border-color: var(--accent); background: var(--accent-light);
+  color: var(--accent); transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.case-sources__pill-icon { font-size: 12px; opacity: 0.85; }
+
 /* ============== CAPSTONE ============== */
 .capstone-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 22px; flex: 1; min-height: 0; overflow: hidden; }
 .capstone-inputs { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-right: 4px; }
@@ -683,10 +768,134 @@ em { color: var(--teal); font-style: italic; }
 .capstone-badge--silver { background: #94a3b8; color: #0f172a; }
 .capstone-badge--gold { background: #facc15; color: #0f172a; }
 
+/* ============== USE CASE (chat + snapshot + WWYD) ============== */
+.use-case-wrap {
+  flex: 1; min-height: 0;
+  display: grid; grid-template-columns: 1.5fr 1fr;
+  gap: 22px; overflow: hidden;
+}
+.use-case-chat {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px 16px;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+.use-case-side {
+  display: flex; flex-direction: column; gap: 14px;
+  overflow-y: auto; padding-right: 4px;
+}
+.story-chat {
+  background: transparent;
+  border: none;
+  padding: 0;
+  flex: 1;
+  display: flex; flex-direction: column;
+  position: relative;
+  min-height: 0;
+}
+
+.data-snapshot {
+  background: linear-gradient(135deg, var(--bg-dark), var(--bg-dark-2));
+  color: #fff; border-radius: 14px;
+  padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.data-snapshot__title {
+  font-family: var(--font-display); font-size: 16px;
+  color: #fff; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.data-snapshot__row {
+  display: grid; grid-template-columns: 92px 1fr;
+  gap: 12px; font-size: 12px;
+  align-items: start; padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.data-snapshot__row:last-child { border-bottom: none; }
+.data-snapshot__label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.55);
+  padding-top: 2px;
+}
+.data-snapshot__value {
+  color: rgba(255,255,255,0.95); line-height: 1.5;
+  font-family: var(--font-mono); font-size: 11.5px;
+}
+.data-snapshot__value--big {
+  font-family: var(--font-display); font-size: 26px;
+  color: #6ee7b7; line-height: 1;
+}
+.data-snapshot__dq {
+  display: inline-flex; gap: 4px; align-items: center;
+}
+.data-snapshot__dq-dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.data-snapshot__dq-dot--filled {
+  background: linear-gradient(135deg, var(--accent), #6ee7b7);
+}
+.data-snapshot__dq-text {
+  margin-left: 6px; font-size: 11px;
+  color: rgba(255,255,255,0.8); font-family: var(--font-body);
+}
+
+.wwyd {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.wwyd__title {
+  font-family: var(--font-display); font-size: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.wwyd__prompt {
+  font-size: 12.5px; color: var(--text-secondary);
+  margin-bottom: 4px; line-height: 1.5;
+}
+.wwyd__options {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.wwyd__option {
+  text-align: left; padding: 10px 12px;
+  border: 1.5px solid var(--border); background: var(--bg-card);
+  border-radius: 10px; cursor: pointer;
+  font-family: var(--font-body); font-size: 12.5px;
+  color: var(--text-primary); transition: all 0.2s ease;
+  line-height: 1.45;
+  display: flex; align-items: flex-start; gap: 10px;
+  width: 100%;
+}
+.wwyd__option:hover {
+  border-color: var(--accent); background: var(--accent-light);
+}
+.wwyd__option-letter {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: var(--bg-secondary); color: var(--text-secondary);
+  font-weight: 700; font-size: 11px; flex-shrink: 0;
+  display: grid; place-items: center;
+}
+.wwyd__option.picked {
+  border-color: var(--accent); background: var(--accent-light);
+}
+.wwyd__option.picked .wwyd__option-letter {
+  background: var(--accent); color: #fff;
+}
+.wwyd__outcome {
+  display: none;
+  padding: 11px 13px; margin-top: 4px;
+  background: var(--green-light); border-left: 3px solid var(--green);
+  border-radius: 8px; font-size: 12px; color: #064e3b;
+  line-height: 1.5;
+}
+.wwyd__outcome.show { display: block; animation: fadeUp 0.3s ease; }
+
 /* ============== MOBILE ============== */
 @media (max-width: 900px) {
   .slide { padding: 64px 24px 90px; }
-  .roadmap-grid, .capstone-grid, .match-grid, .dragsort-row { grid-template-columns: 1fr; }
+  .roadmap-grid, .capstone-grid, .match-grid, .dragsort-row, .use-case-wrap { grid-template-columns: 1fr; }
   .flip-grid { grid-template-columns: 1fr; }
   .scorecard { grid-template-columns: 1fr; text-align: center; }
   .dot-rail { display: none; }
@@ -792,11 +1001,11 @@ const GLOSSARY = [
 ];
 
 const CHARACTERS = {
-  maya:  { emoji: '🌱', name: 'Maya',    role: 'analyst' },
-  rao:   { emoji: '🧠', name: 'Dr. Rao', role: 'mentor' },
-  priya: { emoji: '📊', name: 'Priya',   role: 'CFO' },
-  arjun: { emoji: '🏭', name: 'Arjun',   role: 'procurement' },
-  lina:  { emoji: '🏦', name: 'Lina',    role: 'banker' },
+  maya:  { emoji: '🌱', name: 'Maya',    role: 'analyst',     color: '#00b39f', side: 'left'  },
+  rao:   { emoji: '🧠', name: 'Dr. Rao', role: 'mentor',      color: '#2563eb', side: 'right' },
+  priya: { emoji: '📊', name: 'Priya',   role: 'CFO',         color: '#ea580c', side: 'left'  },
+  arjun: { emoji: '🏭', name: 'Arjun',   role: 'procurement', color: '#7c3aed', side: 'right' },
+  lina:  { emoji: '🏦', name: 'Lina',    role: 'banker',      color: '#16a34a', side: 'left'  },
 };
 
 const ROADMAP = [
@@ -1272,62 +1481,319 @@ const LESSONS = [
 ];
 
 const CASES = [
-  { co: 'Shell',     tag: 'Operational control · Oil &amp; gas',
+  { co: 'Shell', tag: 'Operational control · Oil &amp; gas',
     rows: [
-      ['Boundary',  'Operational control'],
-      ['Trick',     'Operates fields it has minority equity in (e.g., Pearl GTL with Qatar Petroleum, ~15 % equity → 100 % consolidated under op control)'],
-      ['Result',    'Reported Scope 1 ~50 % higher than its equity-share twin'],
+      ['Boundary',          'Operational control — 100% of operated assets, regardless of equity stake.'],
+      ['Scope 1+2 (2024)',  '~58 MtCO₂e operational. Held flat YoY through ~1 MtCO₂e of in-year abatement (flaring + RE) despite higher production.'],
+      ['Methane',           'Reduced 76% vs 2016 baseline. Routine upstream flaring eliminated as of 1 January 2025.'],
+      ['Op-control vs equity', 'Op-control reports systematically higher than equity-share for portfolios full of operated-but-minority-owned JVs (Pearl GTL ≈ 15% equity, fully consolidated).'],
+      ['Disclosure suite',  '2024 Sustainability Report (HTML), Annual Report PDF, GHG Inventory methodology document.'],
     ],
-    lesson: 'Shell is the textbook example of why boundary choice matters. Same physical operations → very different reported numbers.' },
-  { co: 'BP',        tag: 'Equity share → portfolio shift · Oil &amp; gas',
+    lesson: 'Same physical operations, very different reported numbers depending on boundary choice. Shell\'s op-control rule means it carries 100% of emissions from assets it merely operates — Pearl GTL (15% equity, full operational role) is the textbook example. When comparing oil majors, always read the boundary footnote first.',
+    sources: [
+      { kind: 'report',   label: 'Shell Annual Report 2024',  url: 'https://www.shell.com/sustainability/reporting-centre/_jcr_content/root/main/section_597740108/promo.multi.stream/1742873115632/6c20b8111738b9a590ba145f0d1c4fa0e530dae0/shell-annual-report-2024.pdf' },
+      { kind: 'report',   label: 'Shell Reporting Centre',    url: 'https://www.shell.com/sustainability/reporting-centre.html' },
+      { kind: 'standard', label: 'GHG Protocol Scope 3',      url: 'https://ghgprotocol.org/corporate-value-chain-scope-3-standard' },
+    ],
+  },
+
+  { co: 'BP', tag: 'Equity share → portfolio shift · Oil &amp; gas',
     rows: [
-      ['Boundary',  'Equity share (historically)'],
-      ['Trick',     'Russian Rosneft 19.75 % stake — included emissions until divestment'],
-      ['Result',    'Boundary divestment + portfolio sale changed Scope 1+2 by ~20 % in a single year'],
+      ['Boundary',          'Equity share (historical primary view); now also discloses an operational view.'],
+      ['Rosneft',           '19.75% equity stake. bp announced exit on 27 Feb 2022 and ceased equity accounting the same day.'],
+      ['Methodology shift', 'Upstream production CO₂ excludes bp\'s share of Rosneft from 2022 onwards.'],
+      ['2024 vs 2019',      'Operational Scope 1+2 down 38%, including divestment effects.'],
+      ['Disclosure suite',  '2024 Sustainability Report + ESG Datasheet + Basis of Reporting + SASB Index — read together.'],
     ],
-    lesson: 'Approach changes (or portfolio sales) move headline numbers without real-world abatement. Always read the boundary footnote first.' },
-  { co: 'Apple',     tag: 'Cat 1 + Cat 11 dominated · Tech',
+    lesson: 'A boundary divestment can move headline emissions ~20% in a single year without any real-world abatement — same atmosphere, different attribution. bp\'s exit from Rosneft is the canonical example. Always read the basis of reporting alongside the headline number.',
+    sources: [
+      { kind: 'report', label: 'BP Sustainability Report 2024', url: 'https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/sustainability/group-reports/bp-sustainability-report-2024.pdf' },
+      { kind: 'report', label: 'BP ESG Datasheet 2024',         url: 'https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/sustainability/group-reports/bp-esg-datasheet-2024.pdf' },
+      { kind: 'report', label: 'BP Basis of Reporting 2024',    url: 'https://www.bp.com/content/dam/bp/business-sites/en/global/corporate/pdfs/sustainability/group-reports/bp-basis-of-reporting-2024.pdf' },
+    ],
+  },
+
+  { co: 'Apple', tag: 'Cat 1 + Cat 11 dominated · Tech',
     rows: [
-      ['Footprint', '~14 MtCO₂e (FY23, ~99 % Scope 3)'],
-      ['Trick',     'Cat 1 dominated by Al, semiconductors; Cat 11 = customer device charging'],
-      ['Result',    'Single biggest lever: enroll TSMC + smelters into renewable PPAs (≈70 % of Scope 3)'],
+      ['Footprint mix',     'Scope 3 ≈ 99% of total — Cat 1 (raw materials) + Cat 11 (customer device charging) dominate.'],
+      ['2024 reduction',    '>55% absolute reduction vs 2015 baseline across Scope 1+2+3 — without offsets.'],
+      ['Supplier Clean Energy', '17.8 GW of renewable electricity online in the supply chain by FY24.'],
+      ['Avoided emissions', '21.8 MtCO₂e avoided in FY24 via supplier renewable procurement (+17% YoY).'],
+      ['2030 ambition',     'Carbon-neutral across operations + supply chain + product use.'],
     ],
-    lesson: 'For a tech "designer" co., supply-chain decarbonisation is the strategy — Apple\'s Supplier Clean Energy Programme is the playbook.' },
-  { co: 'Maersk',    tag: 'Cat 4 / Cat 11 hybrid · Shipping',
+    lesson: 'For a tech "designer" company that outsources manufacturing, decarbonising the supply chain IS the strategy — not an add-on. Apple\'s playbook (enrol TSMC, smelters, packaging vendors into renewable PPAs) defines the modern Scope 3 reduction roadmap.',
+    sources: [
+      { kind: 'report',  label: 'Apple Environmental Progress Report 2024', url: 'https://www.apple.com/environment/pdf/Apple_Environmental_Progress_Report_2024.pdf' },
+      { kind: 'context', label: 'Apple — emissions cut in half (2024)',     url: 'https://www.apple.com/newsroom/2024/04/apple-cuts-greenhouse-emissions-in-half/' },
+      { kind: 'context', label: 'Apple Environment hub',                    url: 'https://www.apple.com/environment/' },
+    ],
+  },
+
+  { co: 'Maersk', tag: 'Cat 4 / Cat 11 hybrid · Shipping',
     rows: [
-      ['Customers', 'Customers reduce <i>their</i> Cat 4 by paying Maersk for green-fuel transport'],
-      ['Trick',     'Same tonne-km can carry very different EFs depending on fuel'],
-      ['Result',    'Green methanol fleet allows customer Cat 4 reduction of 60–80 % per shipment'],
+      ['Reporting framework',  'First CSRD-aligned Integrated Annual Report (2024).'],
+      ['SBTi target',          'Validated under SBTi Maritime Guidance — reduce absolute Scope 3 by 90% by 2040 from 2022 base.'],
+      ['Net-zero target',      '2040 — a decade ahead of the sector default.'],
+      ['Green methanol fleet', 'Seven dual-fuel methanol vessels delivered in 2024.'],
+      ['Methanol offtake',     'Locked-in volumes cover &gt;50% of expected 2027 dual-fuel demand.'],
+      ['Customer leverage',    'A customer paying for green-fuel transport reduces THEIR Cat 4 by 60–80% per shipment.'],
     ],
-    lesson: 'Demand-side leverage: a customer\'s Scope 3 reduction can move a supplier\'s capex decisions.' },
-  { co: 'HSBC',      tag: 'Cat 15 financed (PCAF) · Banking',
+    lesson: 'A shipping company\'s customer is a Cat 4 reporter. Maersk\'s green-methanol offering is a way to sell Cat 4 abatement upstream to customers — demand-side leverage drives supplier (Maersk) capex decisions. The boundary works in both directions.',
+    sources: [
+      { kind: 'report',   label: 'Maersk Annual Report 2024',         url: 'https://www.maersk.com/~/media_sc9/maersk/corporate/sustainability/files/resources/2024/maersk-annual-report-2024.pdf' },
+      { kind: 'report',   label: 'Maersk Sustainability hub',          url: 'https://www.maersk.com/sustainability/reports-and-resources' },
+      { kind: 'standard', label: 'SBTi Corporate Net-Zero Standard',   url: 'https://sciencebasedtargets.org/net-zero' },
+    ],
+  },
+
+  { co: 'HSBC', tag: 'Cat 15 financed (PCAF) · Banking',
     rows: [
-      ['Footprint', 'Cat 15 ≈ 65 MtCO₂e absolute (2022)'],
-      ['Method',    'PCAF DQ-weighted; ~70 % at DQ ≤ 3, 30 % long-tail at DQ 4–5'],
-      ['Trick',     'Methodology change between 2021–2022 reframed how O&G exposures attribute'],
+      ['Cat 15 dominance',     'For most banks, Cat 15 is 700×+ of operational Scope 1+2.'],
+      ['Method',               'PCAF asset-class methods. Weighted DQ disclosed; year-on-year DQ improvement targeted.'],
+      ['Methodology refresh',  'Annual update; February 2025 publication revised oil &amp; gas attribution.'],
+      ['Facilitated emissions', 'Counted at 33% weighting per the PCAF Standard.'],
+      ['Data sources',         'Third-party vendor data prioritised for cross-counterparty consistency.'],
+      ['Disclosure suite',     '2024 ESG Review + Financed Emissions Methodology + ESG Data Pack — three documents, one inventory.'],
     ],
-    lesson: 'Banks live and die by PCAF method choices. Read the methodology change-log alongside the headline number.' },
+    lesson: 'Banks live and die by PCAF method choices. The headline financed-emissions number moves more from methodology updates than from real-world abatement — read the change log alongside the headline, every year.',
+    sources: [
+      { kind: 'report',   label: 'HSBC ESG Review 2024',                   url: 'https://www.hsbc.com/-/files/hsbc/investors/hsbc-results/2024/annual/pdfs/hsbc-holdings-plc/250227-esg-review-2024.pdf' },
+      { kind: 'report',   label: 'HSBC Financed Emissions Methodology 2025', url: 'https://www.hsbc.com/-/files/hsbc/investors/hsbc-results/2024/annual/pdfs/hsbc-holdings-plc/250219-financed-emissions-methodology-update-published-february-2025.pdf' },
+      { kind: 'standard', label: 'PCAF Global Standard',                   url: 'https://carbonaccountingfinancials.com/en/standard' },
+    ],
+  },
+
   { co: 'Microsoft', tag: 'Scope 3 grew despite Scope 2 falling · Tech',
     rows: [
-      ['Trick',     'AI build-out → semiconductors + datacentre construction → Cat 1 + Cat 2 grew'],
-      ['Tension',   'Carbon-negative-2030 commitment under pressure from Cat 3 capital growth'],
-      ['Lever',     'Long-duration carbon removal procurement to bridge'],
+      ['Scope 3 growth',     '+30.9% vs 2020 baseline. Aggregate Scope 1–3 +29.1%.'],
+      ['Scope 3 share',      '&gt;96% of Microsoft\'s total carbon footprint.'],
+      ['Driver',             'Datacenter construction → embodied carbon in materials + Cat 1 hardware (semiconductors, servers, racks).'],
+      ['Supplier rule',      'Selected high-volume suppliers must use 100% carbon-free electricity for Microsoft-delivered goods/services by 2030.'],
+      ['Removal procurement', 'Multi-year long-duration carbon removal contracts to bridge to the 2030 carbon-negative target.'],
+      ['2030 commitment',    'Carbon-negative-2030 target now under pressure from Cat 1 + Cat 2 capital growth.'],
     ],
-    lesson: 'A company can hit Scope 1+2 targets and still see total emissions grow because of upstream capex. Always look at absolute total.' },
+    lesson: 'A company can hit Scope 1+2 targets and still see total emissions grow because of upstream capex. Microsoft\'s Scope 3 jump from AI buildout proves that 100%-renewable operations don\'t compensate for upstream embodied carbon. Always look at absolute total.',
+    sources: [
+      { kind: 'report',  label: 'Microsoft 2024 Environmental Sustainability Report', url: 'https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/msc/documents/presentations/CSR/Microsoft-2024-Environmental-Sustainability-Report.pdf' },
+      { kind: 'context', label: 'Microsoft On The Issues — 2024 launch blog',        url: 'https://blogs.microsoft.com/on-the-issues/2024/05/15/microsoft-environmental-sustainability-report-2024/' },
+      { kind: 'context', label: 'Microsoft Sustainability hub',                       url: 'https://www.microsoft.com/en-us/corporate-responsibility/sustainability/' },
+    ],
+  },
+
   { co: 'Volkswagen', tag: 'Cat 11 ICE-vs-EV · Auto',
     rows: [
-      ['ICE Cat 11','~33 tCO₂e per vehicle / 200,000 km'],
-      ['EV Cat 11', '~6–10 tCO₂e (depends on grid)'],
-      ['Trick',     'Cat 11 falls but Cat 1 (battery) rises ~3–5 tCO₂e per vehicle'],
+      ['DCI metric (2024)',    'Decarbonization Index (DCI) = 48.0 tCO₂e / vehicle, down 0.9 t YoY.'],
+      ['Lifecycle scope',      'Whole-life Cat 1 + Cat 11. Passenger cars + LCVs across EU27 + UK + Norway + Iceland + China + USA.'],
+      ['Use-phase basis',      '200,000 km lifetime per vehicle; region-specific fleet values; no statutory flexibilities.'],
+      ['BEV vs ICE lifecycle', '~73% lower lifecycle emissions for BEVs vs gasoline (renewable grid: ~78%).'],
+      ['Production trade-off', 'BEVs ~40% higher production emissions due to battery; offset after ~17,000 km of use.'],
     ],
-    lesson: 'Fleet electrification is correct on absolute emissions, but only if you report the upstream battery hit honestly in Cat 1.' },
-  { co: 'Ørsted',    tag: 'Boundary divestment story · Utility',
+    lesson: 'Fleet electrification correctly reduces Scope 3 in absolute terms — but only if the upstream battery hit is reported honestly in Cat 1+2. VW\'s DCI is a single-number lifecycle proxy; auditors look for that kind of consistent metric across cohorts so EV migration claims hold up year over year.',
+    sources: [
+      { kind: 'report',  label: 'VW 2024 Annual Report — Climate',     url: 'https://annualreport2024.volkswagen-group.com/sustainability-report/environment/climate-change.html' },
+      { kind: 'report',  label: 'VW 2024 Annual Report — Sustainability', url: 'https://annualreport2024.volkswagen-group.com/group-management-report/sustainable-value-enhancement/sustainability.html' },
+      { kind: 'context', label: 'VW Group Sustainability landing',     url: 'https://www.volkswagen-group.com/en/sustainability-15765' },
+    ],
+  },
+
+  { co: 'Ørsted', tag: 'Boundary divestment story · Utility',
     rows: [
-      ['Pre-2017',  'Oil &amp; gas + coal-heavy (DONG Energy)'],
-      ['Action',    'Sold upstream O&G + closed coal — pure offshore wind by 2023'],
-      ['Result',    'Scope 1 ↓ ~85 %; Cat 11 (sold electricity) flipped from fossil to renewable'],
+      ['2006 starting point', 'One of Europe\'s most coal-intensive utilities; ~33% of Denmark\'s CO₂ emissions.'],
+      ['Transformation',      'DONG Energy → Ørsted (renamed 2017). Divested upstream O&amp;G + closed coal capacity.'],
+      ['2024 milestone',      'Closed final coal-fired power station (Esbjerg, Denmark).'],
+      ['SBTi target (2017)',  'Validated. ~98% Scope 1+2 intensity reduction by 2025 vs 2006 base.'],
+      ['Cat 11 effect',       'Sold electricity flipped from fossil-heavy to renewable — knock-on customer Cat 3.'],
+      ['2024 reporting',      'First fully CSRD-compliant annual report.'],
     ],
-    lesson: 'Strategy moves the inventory more than any operational efficiency programme. Boundary transitions are the biggest carbon line for utilities.' },
+    lesson: 'Strategy moves the inventory more than any operational efficiency programme. For utilities, boundary transitions (selling polluting assets, building renewable ones) are the single biggest carbon line. Ørsted\'s DONG-to-Ørsted journey is the textbook example of a Scope 1 collapse via portfolio reshape.',
+    sources: [
+      { kind: 'report',  label: 'Ørsted Annual Report 2024',     url: 'https://cdn.orsted.com/-/media/annual2024/orsted-annual-report-2024.pdf' },
+      { kind: 'context', label: 'Ørsted History &amp; Transformation', url: 'https://orsted.com/en/about-us/history-and-transformation' },
+      { kind: 'context', label: 'SBTi Ørsted Case Study',         url: 'https://sciencebasedtargets.org/companies-taking-action/case-studies/orsted' },
+    ],
+  },
+];
+
+const USE_CASES = [
+  {
+    id: 'cat1', cat: 'Cat 1', label: 'Purchased Goods & Services',
+    title: 'NorthBay Foods packaging — hybrid beats spend-based by 4×',
+    subtitle: '₹240 Cr packaging spend, 87 suppliers, CDP deadline in 6 weeks.',
+    cast: [
+      { key: 'maya',  name: 'Maya',  emoji: '🌱', color: '#00b39f', role: 'Sustainability Lead', side: 'left'  },
+      { key: 'david', name: 'David', emoji: '💼', color: '#2563eb', role: 'CFO',                  side: 'right' },
+      { key: 'priya', name: 'Priya', emoji: '🤝', color: '#ea580c', role: 'Supplier Engagement', side: 'left'  },
+      { key: 'ethan', name: 'Ethan', emoji: '🔍', color: '#7c3aed', role: 'External Auditor',    side: 'right' },
+    ],
+    dialogue: [
+      { who: 'maya',  text: 'CDP deadline in 6 weeks. Cat 1 is 60% of our footprint — ₹240 Cr packaging spend across 87 suppliers. We need a defensible method, fast.' },
+      { who: 'david', text: 'Just go spend-based. ₹240 Cr × DEFRA EEIO factor for paper packaging. Done in a day.' },
+      { who: 'priya', text: 'But 12 of our packaging suppliers cover 78% of spend, and I have verified PCFs from 5 of them already. Spend-based throws that data away.' },
+      { who: 'david', text: 'So we mix methods? Won\'t auditors pick that apart?' },
+      { who: 'maya',  text: 'Hybrid is explicit in the GHG Protocol Calculation Guidance. Top 12 supplier-specific, average-data with kg × ecoinvent EF for the rest, long-tail at spend-based — and we disclose the split.' },
+      { who: 'ethan', text: 'Walk me through your largest line item, fully worked. I want to see one all the way through.' },
+      { who: 'priya', text: 'Trishul Packaging: 4,200 t paperboard × 1.32 kgCO₂e/kg verified PCF = 5,544 tCO₂e at PCAF DQ-1. The DEFRA spend equivalent on that same ₹35 Cr line was 23,450 tCO₂e — 4× higher.' },
+      { who: 'maya',  text: 'Hybrid total lands at 38,200 tCO₂e, weighted DQ 2.4. We footnote the 22% long-tail still on spend-based and document the supplier-engagement plan to upgrade by FY26.' },
+    ],
+    snapshot: {
+      ef: 'Hybrid: verified PCFs (1.32 kgCO₂e/kg paperboard) + ecoinvent for mid-tier; DEFRA EEIO for tail.',
+      total: '38,200', totalUnit: 'tCO₂e (Cat 1, FY24)',
+      dq: 2.4, dqLabel: 'Weighted PCAF DQ',
+      assumption: 'Long-tail suppliers (<2% spend each) modelled at sector EEIO. Engagement programme to upgrade tier-2 to DQ-3 by FY26 close.',
+    },
+    wwyd: {
+      prompt: 'Year 2 budget allows ONE upgrade. Which delivers the most defensible Cat 1 number?',
+      options: [
+        { text: 'Onboard top 12 suppliers to verified PCFs', outcome: 'Highest ROI. Weighted DQ 2.4 → 1.8. Defensible for SBTi tracking and CDP A-list.' },
+        { text: 'Move all suppliers to average-data (mass × sector EF)', outcome: 'Wider but shallower coverage. DQ barely moves; reduction tracking still blocked because no supplier-specific signal.' },
+        { text: 'Hire LCA consultants for own-product LCAs', outcome: 'Misallocated — own-product LCAs feed Cat 11/12, not Cat 1. Save this for next cycle.' },
+      ],
+    },
+  },
+
+  {
+    id: 'cat4', cat: 'Cat 4', label: 'Upstream Transportation',
+    title: 'NorthBay logistics — air freight is 0.3% of t-km but 2.4% of Cat 4',
+    subtitle: 'Modal split or marketing rebellion?',
+    cast: [
+      { key: 'maya',  name: 'Maya',  emoji: '🌱', color: '#00b39f', role: 'Sustainability Lead', side: 'left'  },
+      { key: 'arjun', name: 'Arjun', emoji: '🏭', color: '#7c3aed', role: 'Head of Logistics',   side: 'right' },
+      { key: 'priya', name: 'Priya', emoji: '🤝', color: '#ea580c', role: 'Supplier Engagement', side: 'left'  },
+      { key: 'tariq', name: 'Tariq', emoji: '🚚', color: '#0891b2', role: '3PL Account Manager', side: 'right' },
+    ],
+    dialogue: [
+      { who: 'maya',  text: 'Cat 4 covers freight WE pay for. This year: 120m road tonne-km, 8m rail, 0.4m air. I want to know where the carbon actually lives.' },
+      { who: 'arjun', text: 'Air is only 0.3% of tonne-km but I bet it dominates emissions disproportionately. Modes are not equal.' },
+      { who: 'tariq', text: 'DEFRA 2024: road HGV ~80 g/t-km, rail ~25 g/t-km, air freight ~600 g/t-km. Air is roughly 7× road, 24× rail.' },
+      { who: 'maya',  text: 'Math: 120m × 80 g + 8m × 25 g + 0.4m × 600 g = 9,600 + 200 + 240 = 10,040 tCO₂e. Air is 240 t, only 2.4% of Cat 4 — smaller than I expected.' },
+      { who: 'priya', text: 'Why are we air-freighting at all? Premium SKUs?' },
+      { who: 'arjun', text: 'Two SKU launches this year. Marketing wants 3-day end-to-end and the launch event drives ~90% of air bookings.' },
+      { who: 'maya',  text: 'If we shift those to sea + road, we save ~200 tCO₂e but add 8 days. Marketing has to weigh in. Or — modal split: air the launch batch, sea the rest. Cuts emissions ~70% on that lane while protecting launch day.' },
+      { who: 'tariq', text: 'Confirmed feasible. I can route a 30/70 air-then-sea on those lanes. SAF credits would only paper over the air remainder; better to cut the physical flow.' },
+    ],
+    snapshot: {
+      ef: 'DEFRA 2024 — road HGV 80 g, rail 25 g, air freight 600 g per tonne-km.',
+      total: '10,040', totalUnit: 'tCO₂e (Cat 4, FY24)',
+      dq: 2, dqLabel: 'PCAF DQ (TMS data + DEFRA EFs)',
+      assumption: 'Tonne-km exported from 3PL TMS; H1 modal mix held flat for H2; RFI not applied to freight (only passenger).',
+    },
+    wwyd: {
+      prompt: 'Marketing pushes back on slower launch logistics. Pick the ONE move you can defend in audit AND to the CEO.',
+      options: [
+        { text: 'Shift all premium air to sea', outcome: '~220 tCO₂e saved but launches slip ~8 days. NPS risk on flagship SKUs; CMO will escalate.' },
+        { text: 'Modal split: air-then-sea on launch lanes', outcome: '~150 tCO₂e saved, launch-day inventory unchanged. Operationally complex — needs ops + 3PL co-design.' },
+        { text: 'Buy SAF certificates for residual air', outcome: 'Inventory line moves but physical flow doesn\'t. Insetting > offsetting per ICVCM; deprioritise until reduction levers exhausted.' },
+      ],
+    },
+  },
+
+  {
+    id: 'cat6', cat: 'Cat 6', label: 'Business Travel',
+    title: 'Travel programme — small tonnes, loud category',
+    subtitle: '4.2 m flight km, 1,800 employees, every policy debate is visible.',
+    cast: [
+      { key: 'maya',  name: 'Maya',  emoji: '🌱', color: '#00b39f', role: 'Sustainability Lead', side: 'left'  },
+      { key: 'david', name: 'David', emoji: '💼', color: '#2563eb', role: 'CFO',                 side: 'right' },
+      { key: 'sam',   name: 'Sam',   emoji: '📋', color: '#7c3aed', role: 'HR Lead',             side: 'left'  },
+      { key: 'lina',  name: 'Lina',  emoji: '🧳', color: '#b45309', role: 'Travel Manager',      side: 'right' },
+    ],
+    dialogue: [
+      { who: 'maya',  text: 'Cat 6 for CDP. Method + scope decision. Egencia is our TMC — we have line-level data.' },
+      { who: 'lina',  text: 'Egencia gives tonne-km per flight class plus hotel night counts and rental car days. DEFRA 2024 factors plug in directly. No survey needed.' },
+      { who: 'sam',   text: 'Should we include hotels and rental cars, or just flights? Some peers only report flights.' },
+      { who: 'maya',  text: 'GHG Protocol Cat 6 minimum boundary is flights. Hotels + cars are best practice. We include them — the cost of inclusion is one extra pivot table; the cost of omission is an audit footnote.' },
+      { who: 'david', text: 'FY24 travel spend was ₹18 Cr. Tiny next to Cat 1\'s ₹240 Cr. Why is this worth a quarterly review?' },
+      { who: 'maya',  text: 'Because every employee feels the policy. SBTi cares about absolute Scope 3 — small categories cumulatively matter — and reduction conversations on Cat 6 are the most visible the sustainability team will have inside the company.' },
+      { who: 'lina',  text: 'Headline: 4.2 m flight km — 60% economy short-haul, 30% economy long-haul, 10% business. Total 520 t flights + 80 t hotels + 40 t cars = 640 tCO₂e. RFI factor 1.9 applied to long-haul per DEFRA guidance.' },
+      { who: 'david', text: '640 tonnes equals roughly two transatlantic CEO trips a month. OK — quarterly review approved. What does Maya actually want us to change?' },
+    ],
+    snapshot: {
+      ef: 'DEFRA 2024 — flights by cabin class with RFI 1.9 long-haul; hotels by country; cars by fuel type.',
+      total: '640', totalUnit: 'tCO₂e (Cat 6, FY24)',
+      dq: 2, dqLabel: 'PCAF DQ (TMC line-level)',
+      assumption: 'Long-haul flights uplifted by RFI 1.9; hotel EFs from DEFRA country averages; rental car days × DEFRA fleet-average gCO₂/km.',
+    },
+    wwyd: {
+      prompt: 'Pick the ONE intervention to put in the FY25 travel policy.',
+      options: [
+        { text: 'Mandate economy class for all flights under 6 hours', outcome: '~25% Cat 6 reduction; visible HR/exec friction. Best paired with a clear exception process.' },
+        { text: 'Set per-team carbon budgets in tCO₂e', outcome: 'Behavioural shift, not prescriptive. Drives line-manager accountability — but needs travel system to expose tonnes per booking.' },
+        { text: 'Buy offsets for all flight emissions', outcome: 'Cosmetic — doesn\'t reduce. Use only AFTER reduction levers, and only with ICVCM-eligible removals.' },
+      ],
+    },
+  },
+
+  {
+    id: 'cat11', cat: 'Cat 11', label: 'Use of Sold Products',
+    title: 'ICE vs EV cohort — Cat 11 falls 77%, Cat 1 rises',
+    subtitle: 'OEM lifecycle storytelling: report the upstream trade-off honestly.',
+    cast: [
+      { key: 'maya',  name: 'Maya',  emoji: '🌱', color: '#00b39f', role: 'Sustainability Lead',  side: 'left'  },
+      { key: 'klaus', name: 'Klaus', emoji: '🏎️', color: '#2563eb', role: 'Product Engineering',  side: 'right' },
+      { key: 'david', name: 'David', emoji: '💼', color: '#ea580c', role: 'CFO',                   side: 'left'  },
+      { key: 'ethan', name: 'Ethan', emoji: '🔍', color: '#7c3aed', role: 'External Auditor',     side: 'right' },
+    ],
+    dialogue: [
+      { who: 'maya',  text: 'Cat 11 for our ICE sedan: 15,000 km/yr × 12 yrs × 180 gCO₂/km × 2 m units sold = 64.8 MtCO₂e per cohort.' },
+      { who: 'klaus', text: 'Lifetime 12 years from EU TÜV averages. Mileage 15,000 km/yr from IEA Mobility Outlook. We document edition and freeze it for the cohort.' },
+      { who: 'ethan', text: 'Cite IEA edition number, ensure consistency year-over-year, and disclose if you change either assumption.' },
+      { who: 'maya',  text: 'EV variant: 18 kWh/100 km × EU grid 230 gCO₂/kWh × 180,000 km = 7.4 tCO₂e per vehicle vs ICE 32.4 t. 77% reduction in Cat 11 per unit.' },
+      { who: 'klaus', text: 'But the EV battery adds ~6 tCO₂e to Cat 1 (cell manufacturing + minerals). Net per-vehicle saving: ~26 tCO₂e — still a strong case, but not 32.' },
+      { who: 'david', text: 'If we model grid decarbonisation, EV looks better year-over-year. Do we use a declining grid?' },
+      { who: 'maya',  text: 'For SBTi we use a declining grid trajectory aligned to IEA APS. For CDP and IFRS S2 we report static current-grid as primary, declining-grid as sensitivity disclosure. Two views, one rulebook.' },
+      { who: 'ethan', text: 'Document both. Auditors flag any cohort method that quietly assumes future decarbonisation as the central case without disclosure. That\'s the silent-greenwashing trap.' },
+    ],
+    snapshot: {
+      ef: 'ICE tailpipe 180 gCO₂/km (WLTP); EV electricity 230 gCO₂/kWh (EU avg, IEA WEO 2024).',
+      total: '7.4', totalUnit: 'MtCO₂e (1 m EV cohort, vs 32.4 Mt ICE)',
+      dq: 2, dqLabel: 'PCAF DQ (manufacturer test data + grid data)',
+      assumption: 'Lifetime 12 years, mileage 15,000 km/yr (IEA Mobility Outlook 2024). Static EU grid in central case; declining-grid scenario disclosed alongside.',
+    },
+    wwyd: {
+      prompt: 'How do you publish the EV Cat 11 number?',
+      options: [
+        { text: 'Declining-grid as central case (matches PR storyline)', outcome: 'Looks ambitious. Auditor flags optimism bias — assumes future grid policy that you don\'t control.' },
+        { text: 'Static-grid as central, declining-grid as sensitivity', outcome: 'Conservative and defensible. Standard practice; minimises restatement risk year-over-year.' },
+        { text: 'Disclose only well-to-tank EF, exclude grid uncertainty', outcome: 'Incomplete. Cat 11 requires the FULL use-phase emissions, not just fuel cycle. CDP would dock you.' },
+      ],
+    },
+  },
+
+  {
+    id: 'cat15', cat: 'Cat 15', label: 'Investments (PCAF financed emissions)',
+    title: 'Bank corporate loan book — ₹50,000 Cr, 1,400 obligors',
+    subtitle: 'Cat 15 is ~720× Scope 1+2. PCAF method choices decide the headline.',
+    cast: [
+      { key: 'lina',   name: 'Lina',   emoji: '🏦', color: '#16a34a', role: 'Bank ESG Lead',       side: 'left'  },
+      { key: 'sanjay', name: 'Sanjay', emoji: '📊', color: '#ea580c', role: 'Risk Officer',        side: 'right' },
+      { key: 'anika',  name: 'Anika',  emoji: '📋', color: '#7c3aed', role: 'Compliance',          side: 'left'  },
+      { key: 'rohan',  name: 'Rohan',  emoji: '🔍', color: '#2563eb', role: 'PCAF Consultant',     side: 'right' },
+    ],
+    dialogue: [
+      { who: 'lina',   text: 'PCAF Cat 15. Corporate loan book: ₹50,000 Cr, 1,400 obligors. Need to attribute their Scope 1+2 to us by counterparty.' },
+      { who: 'sanjay', text: 'Top 25 obligors are 62% of EAD. 18 are listed and report verified Scope 1+2. 6 are unlisted but disclose physical production data.' },
+      { who: 'lina',   text: 'So DQ-1 for the 18 listed verified ones. DQ-3 for the 6 unlisted with physical data. Long tail (1,375 SMEs) at DQ-4 or DQ-5 per PCAF asset-class guidance.' },
+      { who: 'rohan',  text: 'Attribution: outstanding ÷ EVIC for listed; outstanding ÷ (equity + debt) for unlisted. Update annually with audited financials.' },
+      { who: 'anika',  text: 'Walk me through the steel-mill exposure. ₹1,200 Cr loan — that\'s the one risk wants reviewed first.' },
+      { who: 'lina',   text: 'Steel mill: 18% of (equity + debt). Investee Scope 1 = 280 ktCO₂e. Attributed to us = 0.18 × 280 = 50.4 ktCO₂e. Single largest line in Cat 15.' },
+      { who: 'sanjay', text: 'Total estimated Cat 15: 1.8 MtCO₂e financed. That\'s ~720× our operational Scope 1+2. Tells you why banks live or die by Cat 15 method choices.' },
+      { who: 'rohan',  text: 'Disclose weighted DQ — yours is 3.4 here. PCAF\'s expectation is improvement, not perfection. The year-over-year DQ trend matters more than the absolute headline number.' },
+    ],
+    snapshot: {
+      ef: 'Investee-reported (DQ 1–2) | sector-physical (DQ 3) | sector-economic (DQ 4–5) per PCAF Database 2024.',
+      total: '1,800,000', totalUnit: 'tCO₂e (Cat 15, ~720× Scope 1+2)',
+      dq: 3.4, dqLabel: 'Weighted PCAF DQ',
+      assumption: 'EVIC sourced from FactSet for listed; (equity + debt) from filings for unlisted. Sector EFs from PCAF Database 2024. Annual refresh cycle.',
+    },
+    wwyd: {
+      prompt: 'You have 18 months and a small data-quality budget. What\'s the right move?',
+      options: [
+        { text: 'Push DQ ≤ 2 on top-25 obligors via direct engagement', outcome: 'Feasible. Engage 7 unlisted obligors for verified data; weighted DQ 3.4 → 2.6. Best signal for IFRS S2 readiness.' },
+        { text: 'Reweight portfolio toward low-emission sectors', outcome: 'Real abatement, hits target faster — but it\'s a strategic call that needs Board sign-off, not a sustainability decision.' },
+        { text: 'Use PCAF economic-activity proxies and call it done', outcome: 'Easy but freezes you at DQ 4. Won\'t pass scrutiny in IFRS S2 or CDP A-list era — auditors will flag.' },
+      ],
+    },
+  },
 ];
 
 const CAPSTONE_INPUTS = [
@@ -1466,6 +1932,23 @@ LESSONS.forEach(L => {
   });
 });
 
+/* Use Case section — chat-driven deep dives for Cat 1, 4, 6, 11, 15 */
+addSlide('Use Cases · Intro', `
+  <div class="slide__inner" style="align-items:center;justify-content:center;text-align:center;flex:1;display:flex;flex-direction:column">
+    <div class="cover__badge"><span class="cover__badge-dot"></span>Chat-driven deep dives</div>
+    <h1 class="h-lg" style="max-width:900px;margin-bottom:16px">Five categories, five teams, <em>five real arguments</em>.</h1>
+    <p class="text-lg" style="max-width:760px">Cat 1, 4, 6, 11 and 15 — each told as a live conversation between sustainability, finance, procurement and audit. Watch the messages type in. Pick a "What Would You Do" at the end of each.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:28px">
+      ${USE_CASES.map((uc, i) => `<button class="btn btn--ghost btn--small" onclick="gotoUseCase('${uc.id}')">${uc.cat} · ${uc.label}</button>`).join('')}
+    </div>
+    <button class="btn btn--accent" onclick="next()" style="margin-top:32px">Start with Cat 1 →</button>
+  </div>
+`, { dark: true });
+
+USE_CASES.forEach((uc, i) => {
+  addSlide(`Use Case · ${uc.cat}`, renderUseCase(uc, i, USE_CASES.length), { useCaseId: uc.id });
+});
+
 /* Cases section header + each case as a slide */
 addSlide('Cases · Intro', `
   <div class="slide__inner" style="align-items:center;justify-content:center;text-align:center;flex:1;display:flex;flex-direction:column">
@@ -1476,7 +1959,15 @@ addSlide('Cases · Intro', `
   </div>
 `, { dark: true });
 
+const SOURCE_KIND_ICON = { report: '📄', standard: '🌐', context: '↗' };
+
 CASES.forEach((c, i) => {
+  const sourcesHtml = (c.sources || []).map(s => `
+    <a class="case-sources__pill" href="${s.url}" target="_blank" rel="noopener noreferrer" title="${escapeAttrFull(s.label)}">
+      <span class="case-sources__pill-icon">${SOURCE_KIND_ICON[s.kind] || '↗'}</span>
+      <span>${s.label}</span>
+    </a>
+  `).join('');
   addSlide(`Case · ${c.co}`, `
     <div class="slide__inner">
       <div class="slide-head">
@@ -1497,6 +1988,10 @@ CASES.forEach((c, i) => {
           <b>Why it matters</b>
           ${c.lesson}
         </div>
+        ${sourcesHtml ? `<div class="case-sources">
+          <div class="case-sources__label">Sources · verified</div>
+          <div class="case-sources__pills">${sourcesHtml}</div>
+        </div>` : ''}
       </div>
     </div>
   `);
@@ -1519,17 +2014,136 @@ addSlide('Wrap', `
 /* =========================================================================
    RENDER HELPERS
    ========================================================================= */
+function hexToRgba(hex, alpha) {
+  const h = hex.replace('#','');
+  const r = parseInt(h.substring(0,2), 16);
+  const g = parseInt(h.substring(2,4), 16);
+  const b = parseInt(h.substring(4,6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escapeAttrFull(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function buildChatHtml(messages, opts = {}) {
+  const { autoplay = true, extraClass = '' } = opts;
+  return `
+    <div class="chat-flow ${extraClass}" data-autoplay="${autoplay ? 'true' : 'false'}">
+      <button class="replay-btn" onclick="replayChatFlow(this.parentElement); event.stopPropagation();" type="button">
+        <span style="font-size:10px">▶</span> Replay
+      </button>
+      ${messages.map((m, idx) => {
+        const side = m.side || (idx % 2 === 0 ? 'left' : 'right');
+        const bubbleStyle = `border:1px solid ${hexToRgba(m.color, 0.4)};background:${hexToRgba(m.color, 0.06)};`;
+        const avatarStyle = `border-color:${m.color};color:${m.color};`;
+        return `
+          <div class="chat-msg" data-speaker="${escapeAttrFull(m.speaker)}" data-emoji="${escapeAttrFull(m.emoji)}" data-color="${m.color}" data-side="${side}" data-text="${escapeAttrFull(m.text)}">
+            <div class="chat-msg__col">
+              <div class="chat-msg__avatar" style="${avatarStyle}">${m.emoji}</div>
+              <div class="chat-msg__speaker">${escapeHtml(m.speaker)}</div>
+            </div>
+            <div class="chat-msg__bubble" style="${bubbleStyle}"></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
 function renderStory(L) {
-  return `<div class="chat-wrap">${L.story.map(m => {
+  const messages = L.story.map(m => {
     const c = CHARACTERS[m.who];
-    return `<div class="chat-msg chat-msg--${m.who}">
-      <div class="chat-msg__avatar">${c.emoji}</div>
-      <div>
-        <div class="chat-msg__name">${c.name} · <span style="opacity:.7">${c.role}</span></div>
-        <div class="chat-msg__bubble">${autolinkTerms(m.text)}</div>
+    return {
+      speaker: c.name, emoji: c.emoji, color: c.color,
+      text: m.text, side: m.side || c.side,
+    };
+  });
+  return buildChatHtml(messages, { extraClass: 'story-chat' });
+}
+
+function renderDataSnapshot(s) {
+  const dqRounded = Math.round(s.dq);
+  const dots = [1,2,3,4,5].map(n => `<span class="data-snapshot__dq-dot ${n <= dqRounded ? 'data-snapshot__dq-dot--filled' : ''}"></span>`).join('');
+  return `
+    <div class="data-snapshot">
+      <div class="data-snapshot__title">📐 Data Snapshot</div>
+      <div class="data-snapshot__row">
+        <div class="data-snapshot__label">EF used</div>
+        <div class="data-snapshot__value">${escapeHtml(s.ef)}</div>
       </div>
-    </div>`;
-  }).join('')}</div>`;
+      <div class="data-snapshot__row">
+        <div class="data-snapshot__label">Total</div>
+        <div>
+          <div class="data-snapshot__value--big">${escapeHtml(s.total)}</div>
+          <div class="data-snapshot__value" style="margin-top:2px;color:rgba(255,255,255,0.6)">${escapeHtml(s.totalUnit)}</div>
+        </div>
+      </div>
+      <div class="data-snapshot__row">
+        <div class="data-snapshot__label">DQ score</div>
+        <div>
+          <div class="data-snapshot__dq">${dots}<span class="data-snapshot__dq-text">${s.dq.toFixed ? s.dq.toFixed(1) : s.dq} · ${escapeHtml(s.dqLabel)}</span></div>
+        </div>
+      </div>
+      <div class="data-snapshot__row">
+        <div class="data-snapshot__label">Assumption</div>
+        <div class="data-snapshot__value" style="font-family:var(--font-body);font-size:12px">${escapeHtml(s.assumption)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderWWYD(w, id) {
+  return `
+    <div class="wwyd" data-wwyd-id="${id}">
+      <div class="wwyd__title">🤔 What Would You Do?</div>
+      <div class="wwyd__prompt">${escapeHtml(w.prompt)}</div>
+      <div class="wwyd__options">
+        ${w.options.map((o, i) => `
+          <button class="wwyd__option" type="button" onclick="chooseWWYD('${id}', ${i})">
+            <span class="wwyd__option-letter">${String.fromCharCode(65+i)}</span>
+            <span>${escapeHtml(o.text)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="wwyd__outcome" id="wwyd-outcome-${id}"></div>
+    </div>
+  `;
+}
+
+function renderUseCase(uc, idx, total) {
+  const messages = uc.dialogue.map(d => {
+    const c = uc.cast.find(x => x.key === d.who);
+    return {
+      speaker: c.name, emoji: c.emoji, color: c.color,
+      text: d.text, side: d.side || c.side,
+    };
+  });
+  return `
+    <div class="slide__inner">
+      <div class="slide-head">
+        <div class="slide-head__left">
+          <div class="slide-step">
+            <span class="slide-step__chip">Use Case ${idx+1} / ${total}</span>
+            <span>${escapeHtml(uc.cat)} · ${escapeHtml(uc.label)}</span>
+          </div>
+          <div class="slide-title">${escapeHtml(uc.title)}</div>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">${escapeHtml(uc.subtitle)}</div>
+        </div>
+      </div>
+      <div class="use-case-wrap">
+        <div class="use-case-chat">${buildChatHtml(messages)}</div>
+        <div class="use-case-side">
+          ${renderDataSnapshot(uc.snapshot)}
+          ${renderWWYD(uc.wwyd, uc.id)}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function renderLearn(L) {
@@ -1822,13 +2436,28 @@ let currentIdx = 0;
 function showSlide(i) {
   i = Math.max(0, Math.min(SLIDES.length - 1, i));
   currentIdx = i;
-  document.querySelectorAll('.slide').forEach((el, idx) => el.classList.toggle('active', idx === i));
+  const slides = document.querySelectorAll('.slide');
+  slides.forEach((el, idx) => el.classList.toggle('active', idx === i));
   document.querySelectorAll('.dot').forEach((el, idx) => el.classList.toggle('active', idx === i));
   document.getElementById('slideCurrent').textContent = i + 1;
   document.getElementById('progressBar').style.width = ((i+1) / SLIDES.length * 100) + '%';
   // ensure clicked-into dot is visible
   const dot = document.querySelectorAll('.dot')[i];
   if (dot) dot.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+  // Cancel any running flows on non-active slides
+  document.querySelectorAll('.slide:not(.active) .chat-flow').forEach(f => cancelChatFlow(f));
+  // Auto-play chat flow on the now-active slide
+  const activeSlide = slides[i];
+  if (activeSlide) {
+    const flow = activeSlide.querySelector('.chat-flow[data-autoplay="true"]');
+    if (flow) {
+      // small delay so the slide opacity transition can finish
+      setTimeout(() => {
+        if (activeSlide.classList.contains('active')) playChatFlow(flow);
+      }, 380);
+    }
+  }
 }
 
 function next() { showSlide(currentIdx + 1); }
@@ -1839,6 +2468,133 @@ function gotoLesson(lessonId, tab) {
   if (idx >= 0) showSlide(idx);
 }
 function jumpToLessonTab(lessonId, tab) { gotoLesson(lessonId, tab); }
+function gotoUseCase(id) {
+  const idx = SLIDES.findIndex(s => s.useCaseId === id);
+  if (idx >= 0) showSlide(idx);
+}
+
+/* =========================================================================
+   CHAT-FLOW ANIMATION ENGINE
+   ========================================================================= */
+const CHAT_TIMERS = new WeakMap(); // flowEl -> { timers, cancelled }
+const TYPE_MS = 18;
+const TYPING_INDICATOR_MS = 700;
+const POST_MSG_PAUSE_MS = 320;
+
+function cancelChatFlow(flowEl) {
+  const state = CHAT_TIMERS.get(flowEl);
+  if (state) {
+    state.cancelled = true;
+    state.timers.forEach(t => clearTimeout(t));
+  }
+  if (flowEl) flowEl.querySelectorAll('.typing-indicator').forEach(t => t.remove());
+}
+
+function replayChatFlow(flowEl) {
+  if (!flowEl) return;
+  playChatFlow(flowEl);
+}
+
+function playChatFlow(flowEl) {
+  if (!flowEl || !flowEl.classList.contains('chat-flow')) return;
+  cancelChatFlow(flowEl);
+
+  const messages = Array.from(flowEl.querySelectorAll('.chat-msg'));
+  if (messages.length === 0) return;
+
+  // Reset all messages
+  messages.forEach(m => {
+    m.classList.remove('visible');
+    const bubble = m.querySelector('.chat-msg__bubble');
+    if (bubble) bubble.innerHTML = '';
+  });
+  flowEl.querySelectorAll('.typing-indicator').forEach(t => t.remove());
+  flowEl.scrollTop = 0;
+
+  const state = { timers: [], cancelled: false };
+  CHAT_TIMERS.set(flowEl, state);
+
+  let cursorMs = 250;
+
+  messages.forEach((msg) => {
+    const side = msg.dataset.side || 'left';
+    const color = msg.dataset.color || '#2563eb';
+    const text = msg.dataset.text || '';
+    const speaker = msg.dataset.speaker || '';
+    const emoji = msg.dataset.emoji || '';
+
+    const showIndicatorAt = cursorMs;
+    const showMsgAt = showIndicatorAt + TYPING_INDICATOR_MS;
+    const startTypeAt = showMsgAt + 60;
+
+    // Typing indicator
+    state.timers.push(setTimeout(() => {
+      if (state.cancelled) return;
+      const ind = document.createElement('div');
+      ind.className = 'typing-indicator';
+      ind.dataset.side = side;
+      ind.innerHTML = `
+        <div class="chat-msg__col">
+          <div class="chat-msg__avatar" style="border-color:${color};color:${color}">${emoji}</div>
+          <div class="chat-msg__speaker">${escapeHtml(speaker)}</div>
+        </div>
+        <div class="typing-indicator__bubble" style="border:1px solid ${hexToRgba(color,0.4)};background:${hexToRgba(color,0.06)}">
+          <div class="typing-indicator__dot" style="background:${color}"></div>
+          <div class="typing-indicator__dot" style="background:${color}"></div>
+          <div class="typing-indicator__dot" style="background:${color}"></div>
+        </div>
+      `;
+      flowEl.insertBefore(ind, msg);
+      flowEl.scrollTop = flowEl.scrollHeight;
+    }, showIndicatorAt));
+
+    // Reveal message bubble (remove indicator)
+    state.timers.push(setTimeout(() => {
+      if (state.cancelled) return;
+      flowEl.querySelectorAll('.typing-indicator').forEach(t => t.remove());
+      msg.classList.add('visible');
+      flowEl.scrollTop = flowEl.scrollHeight;
+    }, showMsgAt));
+
+    // Type out characters
+    const bubble = msg.querySelector('.chat-msg__bubble');
+    const linkedFinal = autolinkTerms(text); // final HTML after typing
+    const stripped = text.replace(/\[\[([^\]]+)\]\]/g, '$1').replace(/<[^>]+>/g, '');
+    const decoder = document.createElement('div');
+    decoder.innerHTML = stripped;
+    const plainText = decoder.textContent;
+
+    for (let charIdx = 0; charIdx <= plainText.length; charIdx++) {
+      const at = startTypeAt + charIdx * TYPE_MS;
+      const isLast = charIdx === plainText.length;
+      state.timers.push(setTimeout(() => {
+        if (state.cancelled) return;
+        if (isLast) {
+          bubble.innerHTML = linkedFinal;
+        } else {
+          bubble.innerHTML = escapeHtml(plainText.substring(0, charIdx + 1)) + '<span class="chat-msg__cursor"></span>';
+        }
+        flowEl.scrollTop = flowEl.scrollHeight;
+      }, at));
+    }
+
+    cursorMs = startTypeAt + plainText.length * TYPE_MS + POST_MSG_PAUSE_MS;
+  });
+}
+
+function chooseWWYD(id, optionIdx) {
+  const wrap = document.querySelector(`.wwyd[data-wwyd-id="${id}"]`);
+  if (!wrap) return;
+  const uc = USE_CASES.find(u => u.id === id);
+  if (!uc) return;
+  const opts = wrap.querySelectorAll('.wwyd__option');
+  opts.forEach((o, i) => o.classList.toggle('picked', i === optionIdx));
+  const outcomeEl = document.getElementById(`wwyd-outcome-${id}`);
+  if (outcomeEl) {
+    outcomeEl.innerHTML = `<b style="display:block;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;color:#047857">Outcome</b>${escapeHtml(uc.wwyd.options[optionIdx].outcome)}`;
+    outcomeEl.classList.add('show');
+  }
+}
 
 /* Keyboard */
 document.addEventListener('keydown', (e) => {
